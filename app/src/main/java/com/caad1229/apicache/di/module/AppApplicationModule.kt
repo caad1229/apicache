@@ -8,7 +8,11 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
-class AppApplicationModule(val app: Application) {
+class AppApplicationModule(private val application: Application) {
+
+    @Singleton
+    @Provides
+    fun provideApplication(): Application = application
 
     @Singleton
     @Provides
