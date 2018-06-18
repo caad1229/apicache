@@ -34,6 +34,10 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
+    // dagger
+    implementation "com.google.dagger:dagger:$versions.dagger"
+    annotationProcessor "com.google.dagger:dagger-compiler:$versions.dagger"
+
     // okhttp
     implementation "com.squareup.okhttp3:okhttp:$versions.okhttp3"
     implementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttp3"

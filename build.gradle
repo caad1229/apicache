@@ -2,6 +2,7 @@
 
 buildscript {
     ext.versions = [
+            'dagger': '2.14.1',
             'kotlin': '1.2.41',
             'retrofit2': '2.4.0',
             'stetho'   : '1.5.0',
