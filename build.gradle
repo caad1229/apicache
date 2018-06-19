@@ -5,6 +5,7 @@ buildscript {
             'dagger': '2.14.1',
             'kotlin': '1.2.41',
             'retrofit2': '2.4.0',
+            'robolectric': '3.8',
             'stetho'   : '1.5.0',
             'okhttp3'  : '3.10.0'
     ]
