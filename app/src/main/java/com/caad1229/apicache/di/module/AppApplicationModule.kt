@@ -1,6 +1,7 @@
 package com.caad1229.apicache.di.module
 
 import android.app.Application
+import com.caad1229.apicache.api.gson.CustomGson
 import com.caad1229.apicache.data.remote.qiita.QiitaRestService
 import com.caad1229.apicache.di.qualifier.ForQiita
 import dagger.Module
@@ -43,7 +44,7 @@ class AppApplicationModule(private val application: Application) {
             Retrofit.Builder()
                     .baseUrl(endpoint)
                     .client(client)
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(CustomGson.gson))
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build()
 
