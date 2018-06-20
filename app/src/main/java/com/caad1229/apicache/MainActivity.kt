@@ -5,16 +5,16 @@ import android.os.Bundle
 import com.caad1229.apicache.databinding.ActivityMainBinding
 import com.caad1229.apicache.di.component.ActivityComponent
 import com.caad1229.apicache.presentation.BaseActivity
-import okhttp3.OkHttpClient
-import javax.inject.Inject
+import com.caad1229.apicache.realm.RealmCacheActivity
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity() {
-    @Inject
-    lateinit var okHttpClient: OkHttpClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+
+        realm_cache.setOnClickListener { startActivity(RealmCacheActivity.createIntent(this)) }
     }
 
     override fun inject(component: ActivityComponent) {
