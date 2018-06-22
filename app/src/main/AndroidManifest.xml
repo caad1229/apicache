@@ -19,7 +19,7 @@
         </activity>
 
         <activity
-            android:name=".realm.RealmCacheActivity"
+            android:name=".presentation.realm.RealmCacheActivity"
             android:label="realm cache" />
 
     </application>

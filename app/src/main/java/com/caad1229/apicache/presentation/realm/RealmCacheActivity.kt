@@ -1,4 +1,4 @@
-package com.caad1229.apicache.realm
+package com.caad1229.apicache.presentation.realm
 
 import android.content.Context
 import android.content.Intent
