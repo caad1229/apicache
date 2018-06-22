@@ -2,7 +2,10 @@ package com.caad1229.apicache.di.module
 
 import android.app.Application
 import com.caad1229.apicache.api.gson.CustomGson
+import com.caad1229.apicache.data.datasource.QiitaRemoteDataSource
 import com.caad1229.apicache.data.remote.qiita.QiitaRestService
+import com.caad1229.apicache.data.remote.qiita.mapper.QiitaItemResponseMapper
+import com.caad1229.apicache.data.repository.QiitaRepository
 import com.caad1229.apicache.di.qualifier.ForQiita
 import dagger.Module
 import dagger.Provides
@@ -39,6 +42,16 @@ class AppApplicationModule(private val application: Application) {
     fun provideQiitaRetrofit(okHttpClient: OkHttpClient): Retrofit =
             createRetrofit("https://qiita.com/", okHttpClient)
 
+    @Singleton
+    @Provides
+    fun provideQiitaRemoteDataSource(restService: QiitaRestService): QiitaRemoteDataSource =
+            QiitaRemoteDataSource(QiitaItemResponseMapper(), restService)
+
+    @Singleton
+    @Provides
+    fun provideQiitaRepository(remoteDataSource: QiitaRemoteDataSource): QiitaRepository {
+        return QiitaRepository(remoteDataSource)
+    }
 
     private fun createRetrofit(endpoint: String, client: OkHttpClient): Retrofit =
             Retrofit.Builder()
