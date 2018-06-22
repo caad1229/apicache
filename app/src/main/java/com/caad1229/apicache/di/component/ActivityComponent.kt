@@ -3,7 +3,7 @@ package com.caad1229.apicache.di.component
 import com.caad1229.apicache.MainActivity
 import com.caad1229.apicache.di.module.ActivityModule
 import com.caad1229.apicache.di.scope.ActivityScope
-import com.caad1229.apicache.realm.RealmCacheActivity
+import com.caad1229.apicache.presentation.realm.RealmCacheActivity
 import dagger.Subcomponent
 
 
