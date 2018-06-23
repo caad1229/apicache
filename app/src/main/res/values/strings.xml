@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">apicache</string>
+    <string name="qiita_item_created">が %1$s に投稿</string>
 </resources>

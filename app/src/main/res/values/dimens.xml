@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="list_item_qiita_item_height">64dp</dimen>
+    <dimen name="list_item_qiita_avatar">50dp</dimen>
+</resources>
