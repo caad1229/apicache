@@ -12,7 +12,7 @@ import org.joda.time.format.DateTimeFormat
 
 class QiitaItemViewModel(private val context: Context, val item: QiitaItem) : BaseObservable() {
 
-    val user: ObservableField<String> = ObservableField(item.user.name)
+    val id: ObservableField<String> = ObservableField(item.user.id)
     val created: ObservableField<String> = ObservableField(createPostedString(item.createdAt))
     val title: ObservableField<String> = ObservableField(item.title)
     val likeCount: ObservableField<String> = ObservableField(item.likesCount.toString())

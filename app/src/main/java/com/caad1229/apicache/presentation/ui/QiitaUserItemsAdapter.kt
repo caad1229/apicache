@@ -13,7 +13,7 @@ class QiitaUserItemsAdapter : RecyclerView.Adapter<QiitaUserItemsAdapter.ViewHol
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = ListItemQiitaItemBinding.inflate(inflater)
+        val binding = ListItemQiitaItemBinding.inflate(inflater, parent, false)
         return ViewHolder(binding)
     }
 
