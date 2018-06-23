@@ -1,7 +1,7 @@
 package com.caad1229.apicache.data.repository
 
 import com.caad1229.apicache.data.datasource.QiitaRemoteDataSource
-import com.caad1229.apicache.presentation.entity.qiita.QiitaItem
+import com.caad1229.apicache.presentation.entity.QiitaItem
 import io.reactivex.Single
 import junit.framework.Assert.assertEquals
 import org.junit.Before

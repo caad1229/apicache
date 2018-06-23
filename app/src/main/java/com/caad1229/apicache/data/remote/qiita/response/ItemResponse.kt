@@ -1,6 +1,7 @@
 package com.caad1229.apicache.data.remote.qiita.response
 
-import com.caad1229.apicache.presentation.entity.qiita.User
+import com.caad1229.apicache.presentation.entity.QiitaUser
+import com.google.gson.annotations.SerializedName
 import org.joda.time.DateTime
 
 data class ItemResponse(
@@ -10,5 +11,6 @@ data class ItemResponse(
         val likesCount: Int,
         val createdAt: DateTime,
         val updatedAt: DateTime,
-        val user: User
+        @SerializedName("user")
+        val user: QiitaUser
 )
