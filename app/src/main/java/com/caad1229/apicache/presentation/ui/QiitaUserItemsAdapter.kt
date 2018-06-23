@@ -5,9 +5,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.caad1229.apicache.databinding.ListItemQiitaItemBinding
 import com.caad1229.apicache.presentation.entity.QiitaItem
+import com.caad1229.apicache.presentation.navigator.QiitaNavigator
 import com.caad1229.apicache.presentation.viewmodel.QiitaItemViewModel
 
-class QiitaUserItemsAdapter : RecyclerView.Adapter<QiitaUserItemsAdapter.ViewHolder>() {
+class QiitaUserItemsAdapter(val navigator: QiitaNavigator) : RecyclerView.Adapter<QiitaUserItemsAdapter.ViewHolder>() {
 
     var data: List<QiitaItem> = listOf()
 
@@ -18,7 +19,7 @@ class QiitaUserItemsAdapter : RecyclerView.Adapter<QiitaUserItemsAdapter.ViewHol
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(QiitaItemViewModel(holder.itemView.context, data[position]))
+        holder.bind(QiitaItemViewModel(holder.itemView.context, data[position], navigator))
     }
 
     override fun getItemCount(): Int = data.size

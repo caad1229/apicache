@@ -7,10 +7,11 @@ import android.databinding.ObservableField
 import com.caad1229.apicache.BR
 import com.caad1229.apicache.R
 import com.caad1229.apicache.presentation.entity.QiitaItem
+import com.caad1229.apicache.presentation.navigator.QiitaNavigator
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 
-class QiitaItemViewModel(private val context: Context, val item: QiitaItem) : BaseObservable() {
+class QiitaItemViewModel(private val context: Context, val item: QiitaItem, val navigator: QiitaNavigator) : BaseObservable() {
 
     val id: ObservableField<String> = ObservableField(item.user.id)
     val created: ObservableField<String> = ObservableField(createPostedString(item.createdAt))
@@ -28,5 +29,13 @@ class QiitaItemViewModel(private val context: Context, val item: QiitaItem) : Ba
     private fun createPostedString(datetime: DateTime): String {
         val date = DateTimeFormat.forPattern("yyyy/MM/dd").print(datetime)
         return context.resources.getString(R.string.qiita_item_created, date)
+    }
+
+    fun onClickUser() {
+        navigator.navigateToUserDetail(item.user)
+    }
+
+    fun onClickItem() {
+        navigator.navigateToItemDetail(item)
     }
 }
