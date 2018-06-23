@@ -1,12 +1,14 @@
 package com.caad1229.apicache.di.module
 
 import android.app.Application
+import com.caad1229.apicache.BuildConfig
 import com.caad1229.apicache.api.gson.CustomGson
 import com.caad1229.apicache.data.datasource.QiitaRemoteDataSource
 import com.caad1229.apicache.data.remote.qiita.QiitaRestService
 import com.caad1229.apicache.data.remote.qiita.mapper.QiitaItemResponseMapper
 import com.caad1229.apicache.data.repository.QiitaRepository
 import com.caad1229.apicache.di.qualifier.ForQiita
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -25,11 +27,7 @@ class AppApplicationModule(private val application: Application) {
 
     @Singleton
     @Provides
-    fun provideOkHttpClient(): OkHttpClient =
-            OkHttpClient.Builder()
-                    .connectTimeout(CONNECT_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS)
-                    .readTimeout(READ_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS)
-                    .build()
+    fun provideOkHttpClient(): OkHttpClient = createOkHttpClientBuilder().build()
 
     @Singleton
     @Provides
@@ -40,7 +38,7 @@ class AppApplicationModule(private val application: Application) {
     @Provides
     @ForQiita
     fun provideQiitaRetrofit(okHttpClient: OkHttpClient): Retrofit =
-            createRetrofit("https://qiita.com/", okHttpClient)
+            createRetrofit("https://qiita.com/api/v2/", okHttpClient)
 
     @Singleton
     @Provides
@@ -51,6 +49,17 @@ class AppApplicationModule(private val application: Application) {
     @Provides
     fun provideQiitaRepository(remoteDataSource: QiitaRemoteDataSource): QiitaRepository {
         return QiitaRepository(remoteDataSource)
+    }
+
+    private fun createOkHttpClientBuilder(): OkHttpClient.Builder {
+        val builder = OkHttpClient.Builder()
+                .connectTimeout(CONNECT_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS)
+                .readTimeout(READ_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS)
+
+        if (BuildConfig.DEBUG) {
+            builder.addNetworkInterceptor(StethoInterceptor())
+        }
+        return builder
     }
 
     private fun createRetrofit(endpoint: String, client: OkHttpClient): Retrofit =
