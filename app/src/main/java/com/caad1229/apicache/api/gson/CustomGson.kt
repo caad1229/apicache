@@ -16,6 +16,7 @@ class CustomGson {
                 GsonBuilder()
                         .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                         .registerTypeAdapter(DateTime::class.java, DateTimeConverter())
+                        .setLenient()
                         .create()
 
     }
