@@ -19,7 +19,7 @@
         </activity>
 
         <activity
-            android:name=".presentation.realm.RealmCacheActivity"
+            android:name=".presentation.ui.QiitaUserItemsActivity"
             android:label="realm cache" />
 
     </application>

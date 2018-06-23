@@ -1,4 +1,4 @@
-package com.caad1229.apicache.presentation.entity.qiita
+package com.caad1229.apicache.presentation.entity
 
 import org.joda.time.DateTime
 
@@ -9,5 +9,5 @@ data class QiitaItem(
         val likesCount: Int,
         val createdAt: DateTime,
         val updatedAt: DateTime,
-        val user: User
+        val user: QiitaUser
 )

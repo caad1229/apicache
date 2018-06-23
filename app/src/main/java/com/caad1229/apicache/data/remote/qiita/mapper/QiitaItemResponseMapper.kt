@@ -2,7 +2,7 @@ package com.caad1229.apicache.data.remote.qiita.mapper
 
 import com.caad1229.apicache.data.mapper.Mapper
 import com.caad1229.apicache.data.remote.qiita.response.ItemResponse
-import com.caad1229.apicache.presentation.entity.qiita.QiitaItem
+import com.caad1229.apicache.presentation.entity.QiitaItem
 import java.lang.UnsupportedOperationException
 
 class QiitaItemResponseMapper : Mapper<QiitaItem, ItemResponse> {
