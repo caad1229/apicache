@@ -10,7 +10,7 @@ import com.caad1229.apicache.presentation.entity.QiitaItem
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 
-class QiitaItemViewModel(private val context: Context, item: QiitaItem) : BaseObservable() {
+class QiitaItemViewModel(private val context: Context, val item: QiitaItem) : BaseObservable() {
 
     val user: ObservableField<String> = ObservableField(item.user.name)
     val created: ObservableField<String> = ObservableField(createPostedString(item.createdAt))
@@ -29,5 +29,4 @@ class QiitaItemViewModel(private val context: Context, item: QiitaItem) : BaseOb
         val date = DateTimeFormat.forPattern("yyyy/MM/dd").print(datetime)
         return context.resources.getString(R.string.qiita_item_created, date)
     }
-
 }
