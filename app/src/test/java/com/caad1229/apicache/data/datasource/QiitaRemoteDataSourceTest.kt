@@ -33,7 +33,7 @@ class QiitaRemoteDataSourceTest {
     fun getUserItem() {
         `when`(mockedRestService.getUserItems(userId)).thenReturn(Single.just(loadFromJsonResponse()))
 
-        val result = dataSource.getUserItem(userId).blockingGet()
+        val result = dataSource.getUserItems(userId).blockingGet()
         result[0].run {
             assertEquals("4bd431809afb1bb99e4f", id)
             assertEquals("Example title", title)
