@@ -9,7 +9,7 @@ buildscript {
             'supportLib' : '27.1.1',
             'stetho'     : '1.5.0',
             'mockito'    : '2.19.0',
-            'realm'      : '5.3.0',
+            'realm'      : '2.2.1',
             'okhttp3'    : '3.10.0'
     ]
 

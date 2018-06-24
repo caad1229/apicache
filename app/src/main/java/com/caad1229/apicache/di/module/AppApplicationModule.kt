@@ -8,9 +8,12 @@ import com.caad1229.apicache.data.remote.qiita.QiitaRestService
 import com.caad1229.apicache.data.remote.qiita.mapper.QiitaItemResponseMapper
 import com.caad1229.apicache.data.repository.QiitaRepository
 import com.caad1229.apicache.di.qualifier.ForQiita
+import com.caad1229.apicache.util.realm.RealmFactory
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import dagger.Module
 import dagger.Provides
+import io.realm.Realm
+import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -24,6 +27,17 @@ class AppApplicationModule(private val application: Application) {
     @Singleton
     @Provides
     fun provideApplication(): Application = application
+
+    @Singleton
+    @Provides
+    fun provideRealmFactory(): RealmFactory {
+        Realm.init(application)
+        val inMemoryConfig = RealmConfiguration.Builder()
+                .name("in-memory.realm")
+                .inMemory()
+                .build()
+        return RealmFactory(inMemoryConfig)
+    }
 
     @Singleton
     @Provides
