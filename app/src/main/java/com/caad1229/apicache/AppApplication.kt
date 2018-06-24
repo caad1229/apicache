@@ -1,6 +1,7 @@
 package com.caad1229.apicache
 
 import android.app.Application
+import android.os.Build
 import com.caad1229.apicache.di.component.AppApplicationComponent
 import com.caad1229.apicache.di.component.DaggerAppApplicationComponent
 import com.caad1229.apicache.di.module.AppApplicationModule
@@ -19,7 +20,7 @@ class AppApplication : Application() {
     @Inject
     lateinit var realmFactory: RealmFactory
 
-    private lateinit var realmInMemory: Realm
+    private var realmInMemory: Realm? = null
 
     override fun onCreate() {
         component = DaggerAppApplicationComponent.builder()
@@ -29,12 +30,14 @@ class AppApplication : Application() {
 
         super.onCreate()
 
-        setupStetho()
-        setupRealm()
+        if ("robolectric" != Build.FINGERPRINT) {
+            setupStetho()
+            setupRealm()
+        }
     }
 
     override fun onTerminate() {
-        realmInMemory.close()
+        realmInMemory?.close()
         super.onTerminate()
     }
 
