@@ -11,7 +11,11 @@ import com.caad1229.apicache.presentation.navigator.QiitaNavigator
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 
-class QiitaItemViewModel(private val context: Context, val item: QiitaItem, val navigator: QiitaNavigator) : BaseObservable() {
+class QiitaItemViewModel(
+        private val context: Context,
+        private val item: QiitaItem,
+        private val navigator: QiitaNavigator
+) : BaseObservable() {
 
     val id: ObservableField<String> = ObservableField(item.user.id)
     val created: ObservableField<String> = ObservableField(createPostedString(item.createdAt))
