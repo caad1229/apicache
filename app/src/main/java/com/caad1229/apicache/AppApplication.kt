@@ -12,7 +12,7 @@ import io.realm.Realm
 import okhttp3.OkHttpClient
 import javax.inject.Inject
 
-class AppApplication : Application() {
+open class AppApplication : Application() {
 
     lateinit var component: AppApplicationComponent
     @Inject
@@ -23,9 +23,7 @@ class AppApplication : Application() {
     private var realmInMemory: Realm? = null
 
     override fun onCreate() {
-        component = DaggerAppApplicationComponent.builder()
-                .appApplicationModule(AppApplicationModule(this))
-                .build()
+        component = createComponent()
         component.inject(this)
 
         super.onCreate()
@@ -40,6 +38,11 @@ class AppApplication : Application() {
         realmInMemory?.close()
         super.onTerminate()
     }
+
+    open fun createComponent(): AppApplicationComponent =
+            DaggerAppApplicationComponent.builder()
+                    .appApplicationModule(AppApplicationModule(this))
+                    .build()
 
     private fun setupStetho() {
         Stetho.initialize(
