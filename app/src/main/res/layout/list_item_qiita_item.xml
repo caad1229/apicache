@@ -28,7 +28,6 @@
             android:layout_height="match_parent"
             android:layout_margin="4dp">
 
-            <!-- TODO: load image -->
             <ImageView
                 android:id="@+id/avatar"
                 android:layout_width="@dimen/list_item_qiita_avatar"
@@ -37,9 +36,9 @@
                 android:layout_marginTop="8dp"
                 android:background="@color/place_holder"
                 android:contentDescription="avatar"
-                app:loadImg="@{viewModel.profileImageUrl}"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:loadImg="@{viewModel.profileImageUrl}"
                 tools:ignore="HardcodedText"
                 tools:src="@mipmap/ic_launcher" />
 
