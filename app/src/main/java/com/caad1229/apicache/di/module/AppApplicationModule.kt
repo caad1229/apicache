@@ -3,14 +3,20 @@ package com.caad1229.apicache.di.module
 import android.app.Application
 import com.caad1229.apicache.BuildConfig
 import com.caad1229.apicache.api.gson.CustomGson
+import com.caad1229.apicache.data.datasource.QiitaLocalDataSource
 import com.caad1229.apicache.data.datasource.QiitaRemoteDataSource
+import com.caad1229.apicache.data.local.mapper.QiitaItemRealmEntityMapper
+import com.caad1229.apicache.data.local.mapper.QiitaUserRealmEntityMapper
 import com.caad1229.apicache.data.remote.qiita.QiitaRestService
 import com.caad1229.apicache.data.remote.qiita.mapper.QiitaItemResponseMapper
 import com.caad1229.apicache.data.repository.QiitaRepository
 import com.caad1229.apicache.di.qualifier.ForQiita
+import com.caad1229.apicache.util.realm.RealmFactory
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import dagger.Module
 import dagger.Provides
+import io.realm.Realm
+import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -19,11 +25,22 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
-class AppApplicationModule(private val application: Application) {
+open class AppApplicationModule(private val application: Application) {
 
     @Singleton
     @Provides
     fun provideApplication(): Application = application
+
+    @Singleton
+    @Provides
+    open fun provideRealmFactory(): RealmFactory {
+        Realm.init(application)
+        val inMemoryConfig = RealmConfiguration.Builder()
+                .name("in-memory.realm")
+                .inMemory()
+                .build()
+        return RealmFactory(inMemoryConfig)
+    }
 
     @Singleton
     @Provides
@@ -47,8 +64,13 @@ class AppApplicationModule(private val application: Application) {
 
     @Singleton
     @Provides
-    fun provideQiitaRepository(remoteDataSource: QiitaRemoteDataSource): QiitaRepository {
-        return QiitaRepository(remoteDataSource)
+    fun provideQiitaLocalDataSource(realmFactory: RealmFactory): QiitaLocalDataSource =
+            QiitaLocalDataSource(QiitaItemRealmEntityMapper(QiitaUserRealmEntityMapper()), realmFactory)
+
+    @Singleton
+    @Provides
+    fun provideQiitaRepository(localDataSource: QiitaLocalDataSource, remoteDataSource: QiitaRemoteDataSource): QiitaRepository {
+        return QiitaRepository(localDataSource, remoteDataSource)
     }
 
     private fun createOkHttpClientBuilder(): OkHttpClient.Builder {
