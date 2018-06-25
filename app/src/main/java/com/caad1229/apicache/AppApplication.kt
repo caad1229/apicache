@@ -9,6 +9,7 @@ import com.caad1229.apicache.util.realm.RealmFactory
 import com.facebook.stetho.Stetho
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider
 import io.realm.Realm
+import net.danlew.android.joda.JodaTimeAndroid
 import okhttp3.OkHttpClient
 import javax.inject.Inject
 
@@ -29,6 +30,7 @@ open class AppApplication : Application() {
         super.onCreate()
 
         if ("robolectric" != Build.FINGERPRINT) {
+            JodaTimeAndroid.init(this)
             setupStetho()
             setupRealm()
         }
