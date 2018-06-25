@@ -21,6 +21,7 @@ class QiitaItemViewModel(
     val created: ObservableField<String> = ObservableField(createPostedString(item.createdAt))
     val title: ObservableField<String> = ObservableField(item.title)
     val likeCount: ObservableField<String> = ObservableField(item.likesCount.toString())
+    val profileImageUrl: ObservableField<String> =ObservableField(item.user.profileImageUrl)
 
     @get:Bindable
     var createdAt: DateTime = item.createdAt
