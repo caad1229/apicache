@@ -11,7 +11,8 @@ import com.caad1229.apicache.util.realm.RealmFactory
 import com.google.gson.reflect.TypeToken
 import io.realm.Realm
 import io.realm.RealmList
-import org.junit.Assert.assertEquals
+import io.reactivex.schedulers.Schedulers
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -38,7 +39,7 @@ class QiitaLocalDataSourceTest {
 
         realmMapper = QiitaItemRealmEntityMapper(QiitaUserRealmEntityMapper())
         responseMapper = QiitaItemResponseMapper()
-        dataSource = QiitaLocalDataSource(realmMapper, mockedRealmFactory)
+        dataSource = spy(QiitaLocalDataSource(realmMapper, mockedRealmFactory))
     }
 
     @Test
@@ -56,6 +57,17 @@ class QiitaLocalDataSourceTest {
         }
     }
 
+    @Test
+    fun getUserItems_キャッシュなし() {
+        // キャッシュなし
+        doReturn(null).`when`(dataSource).getQiitaUserItemsRealmList(mockedRealm, userId)
+
+        var error: Throwable? = null
+        dataSource.getUserItems(userId)
+                .subscribeOn(Schedulers.trampoline())
+                .subscribe({ fail() }, { error = it })
+        assertTrue(error is QiitaLocalDataSource.NoCacheException)
+    }
 
     private fun qiitaItemRealmEntityList(): List<QiitaItemRealmEntity> {
         val reader = FileReader("./src/test/data-fixtures/qiita-items.json")
