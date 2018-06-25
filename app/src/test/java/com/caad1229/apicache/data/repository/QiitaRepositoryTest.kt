@@ -24,7 +24,7 @@ class QiitaRepositoryTest {
     fun setUp() {
         mockedRemoteData = mock(QiitaItem::class.java)
         mockedRemoteDataSource = mock(QiitaRemoteDataSource::class.java)
-        `when`(mockedRemoteDataSource.getUserItem(userId)).thenReturn(Single.just(listOf(mockedRemoteData)))
+        `when`(mockedRemoteDataSource.getUserItems(userId)).thenReturn(Single.just(listOf(mockedRemoteData)))
 
         repository = QiitaRepository(mockedRemoteDataSource)
     }

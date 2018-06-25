@@ -1,6 +1,7 @@
 package com.caad1229.apicache
 
 import android.app.Application
+import android.os.Build
 import com.caad1229.apicache.di.component.AppApplicationComponent
 import com.caad1229.apicache.di.component.DaggerAppApplicationComponent
 import com.caad1229.apicache.di.module.AppApplicationModule
@@ -8,10 +9,11 @@ import com.caad1229.apicache.util.realm.RealmFactory
 import com.facebook.stetho.Stetho
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider
 import io.realm.Realm
+import net.danlew.android.joda.JodaTimeAndroid
 import okhttp3.OkHttpClient
 import javax.inject.Inject
 
-class AppApplication : Application() {
+open class AppApplication : Application() {
 
     lateinit var component: AppApplicationComponent
     @Inject
@@ -19,24 +21,30 @@ class AppApplication : Application() {
     @Inject
     lateinit var realmFactory: RealmFactory
 
-    private lateinit var realmInMemory: Realm
+    private var realmInMemory: Realm? = null
 
     override fun onCreate() {
-        component = DaggerAppApplicationComponent.builder()
-                .appApplicationModule(AppApplicationModule(this))
-                .build()
+        component = createComponent()
         component.inject(this)
 
         super.onCreate()
 
-        setupStetho()
-        setupRealm()
+        if ("robolectric" != Build.FINGERPRINT) {
+            JodaTimeAndroid.init(this)
+            setupStetho()
+            setupRealm()
+        }
     }
 
     override fun onTerminate() {
-        realmInMemory.close()
+        realmInMemory?.close()
         super.onTerminate()
     }
+
+    open fun createComponent(): AppApplicationComponent =
+            DaggerAppApplicationComponent.builder()
+                    .appApplicationModule(AppApplicationModule(this))
+                    .build()
 
     private fun setupStetho() {
         Stetho.initialize(

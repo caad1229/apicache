@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
-class AppApplicationModule(private val application: Application) {
+open class AppApplicationModule(private val application: Application) {
 
     @Singleton
     @Provides
@@ -30,7 +30,7 @@ class AppApplicationModule(private val application: Application) {
 
     @Singleton
     @Provides
-    fun provideRealmFactory(): RealmFactory {
+    open fun provideRealmFactory(): RealmFactory {
         Realm.init(application)
         val inMemoryConfig = RealmConfiguration.Builder()
                 .name("in-memory.realm")

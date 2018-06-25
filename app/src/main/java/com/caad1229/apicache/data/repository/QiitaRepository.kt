@@ -9,6 +9,6 @@ class QiitaRepository @Inject constructor(
         private val remoteDataSource: QiitaRemoteDataSource
 ) {
     fun getUserItems(userId: String): Single<List<QiitaItem>> {
-        return remoteDataSource.getUserItem(userId)
+        return remoteDataSource.getUserItems(userId)
     }
 }
