@@ -3,7 +3,10 @@ package com.caad1229.apicache.di.module
 import android.app.Application
 import com.caad1229.apicache.BuildConfig
 import com.caad1229.apicache.api.gson.CustomGson
+import com.caad1229.apicache.data.datasource.QiitaLocalDataSource
 import com.caad1229.apicache.data.datasource.QiitaRemoteDataSource
+import com.caad1229.apicache.data.local.mapper.QiitaItemRealmEntityMapper
+import com.caad1229.apicache.data.local.mapper.QiitaUserRealmEntityMapper
 import com.caad1229.apicache.data.remote.qiita.QiitaRestService
 import com.caad1229.apicache.data.remote.qiita.mapper.QiitaItemResponseMapper
 import com.caad1229.apicache.data.repository.QiitaRepository
@@ -61,8 +64,13 @@ open class AppApplicationModule(private val application: Application) {
 
     @Singleton
     @Provides
-    fun provideQiitaRepository(remoteDataSource: QiitaRemoteDataSource): QiitaRepository {
-        return QiitaRepository(remoteDataSource)
+    fun provideQiitaLocalDataSource(realmFactory: RealmFactory): QiitaLocalDataSource =
+            QiitaLocalDataSource(QiitaItemRealmEntityMapper(QiitaUserRealmEntityMapper()), realmFactory)
+
+    @Singleton
+    @Provides
+    fun provideQiitaRepository(localDataSource: QiitaLocalDataSource, remoteDataSource: QiitaRemoteDataSource): QiitaRepository {
+        return QiitaRepository(localDataSource, remoteDataSource)
     }
 
     private fun createOkHttpClientBuilder(): OkHttpClient.Builder {
