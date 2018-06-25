@@ -20,7 +20,7 @@ class QiitaUserItemsViewModel @Inject constructor(
     }
 
     fun onStart() {
-        repository.getUserItems(userName)
+        repository.getItems()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({

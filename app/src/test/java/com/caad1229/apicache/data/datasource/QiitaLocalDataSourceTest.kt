@@ -48,7 +48,7 @@ class QiitaLocalDataSourceTest {
         qiitaItemRealmEntityList().map { realmList.add(it) }
 
         val cacheData = QiitaUserItemsRealmEntity(userId, realmList)
-        doReturn(cacheData).`when`(dataSource).getQiitaUserItemsRealmList(mockedRealm, userId)
+        doReturn(cacheData).`when`(dataSource).getQiitaItemsRealmList(mockedRealm, userId)
 
         val result = dataSource.getUserItems(userId).blockingGet()
         result.run {
@@ -60,7 +60,7 @@ class QiitaLocalDataSourceTest {
     @Test
     fun getUserItems_キャッシュなし() {
         // キャッシュなし
-        doReturn(null).`when`(dataSource).getQiitaUserItemsRealmList(mockedRealm, userId)
+        doReturn(null).`when`(dataSource).getQiitaItemsRealmList(mockedRealm, userId)
 
         var error: Throwable? = null
         dataSource.getUserItems(userId)

@@ -20,9 +20,9 @@ class QiitaLocalDataSource @Inject constructor(
 
     private fun realm() = realmFactory.createRealmInMemoryInstance()
 
-    override fun getUserItems(userId: String): Single<List<QiitaItem>> {
+    override fun getItems(key: String): Single<List<QiitaItem>> {
         realm().use { realm ->
-            val result = getQiitaUserItemsRealmList(realm, userId)
+            val result = getQiitaItemsRealmList(realm, key)
 
             return if (result != null && result.isCached() && !result.isExpired()) {
                 Single.just(result.items.map { realmMapper.mapFromEntity(it) })
@@ -32,14 +32,16 @@ class QiitaLocalDataSource @Inject constructor(
         }
     }
 
-    override fun saveUserItems(userId: String, items: List<QiitaItem>) {
+    override fun getUserItems(userId: String): Single<List<QiitaItem>> = getItems(userId)
+
+    override fun saveItems(key: String, items: List<QiitaItem>) {
         val realmList = RealmList<QiitaItemRealmEntity>()
         items.map { item ->
             realmList.add(realmMapper.mapToEntity(item))
         }
         realm().use { realm ->
             realm.executeTransaction {
-                realm.insertOrUpdate(QiitaUserItemsRealmEntity(userId, realmList))
+                realm.insertOrUpdate(QiitaUserItemsRealmEntity(key, realmList))
             }
         }
     }
@@ -54,7 +56,7 @@ class QiitaLocalDataSource @Inject constructor(
     }
 
     @VisibleForTesting
-    fun getQiitaUserItemsRealmList(realm: Realm, userId: String): QiitaUserItemsRealmEntity? =
+    fun getQiitaItemsRealmList(realm: Realm, userId: String): QiitaUserItemsRealmEntity? =
             realm.where(QiitaUserItemsRealmEntity::class.java)
                     .equalTo("userId", userId)
                     .findFirst()
