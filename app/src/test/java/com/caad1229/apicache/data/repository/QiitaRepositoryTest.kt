@@ -1,5 +1,6 @@
 package com.caad1229.apicache.data.repository
 
+import com.caad1229.apicache.data.datasource.QiitaLocalDataSource
 import com.caad1229.apicache.data.datasource.QiitaRemoteDataSource
 import com.caad1229.apicache.presentation.entity.QiitaItem
 import io.reactivex.Single
@@ -20,18 +21,43 @@ class QiitaRepositoryTest {
     private lateinit var mockedRemoteDataSource: QiitaRemoteDataSource
     private lateinit var mockedRemoteData: QiitaItem
 
+    private lateinit var mockedLocalDataSource: QiitaLocalDataSource
+    private lateinit var mockedLocalData: QiitaItem
+
     @Before
     fun setUp() {
         mockedRemoteData = mock(QiitaItem::class.java)
         mockedRemoteDataSource = mock(QiitaRemoteDataSource::class.java)
         `when`(mockedRemoteDataSource.getUserItems(userId)).thenReturn(Single.just(listOf(mockedRemoteData)))
 
-        repository = QiitaRepository(mockedRemoteDataSource)
+        mockedLocalData = mock(QiitaItem::class.java)
+        mockedLocalDataSource = mock(QiitaLocalDataSource::class.java)
+
+        repository = QiitaRepository(mockedLocalDataSource, mockedRemoteDataSource)
     }
 
     @Test
-    fun getUserItem_リモートから取得() {
+    fun getUserItem_キャッシュあり() {
+        `when`(mockedLocalDataSource.getUserItems(userId)).thenReturn(Single.just(listOf(mockedLocalData)))
+
         val result = repository.getUserItems(userId).blockingGet()
+        assertEquals(mockedLocalData, result.first())
+    }
+
+    @Test
+    fun getUserItem_キャッシュなし() {
+        `when`(mockedLocalDataSource.getUserItems(userId))
+                .thenReturn(Single.error(QiitaLocalDataSource.NoCacheException()))
+
+        val result = repository.getUserItems(userId).blockingGet()
+        assertEquals(mockedRemoteData, result.first())
+    }
+
+    @Test
+    fun getUserItem_リモートから強制取得() {
+        `when`(mockedLocalDataSource.getUserItems(userId)).thenReturn(Single.just(listOf(mockedLocalData)))
+
+        val result = repository.getUserItems(userId, true).blockingGet()
         assertEquals(mockedRemoteData, result.first())
     }
 }
