@@ -3,7 +3,7 @@ package com.caad1229.apicache.data.datasource
 import android.support.annotation.VisibleForTesting
 import com.caad1229.apicache.data.local.mapper.QiitaItemRealmEntityMapper
 import com.caad1229.apicache.data.local.realm.QiitaItemRealmEntity
-import com.caad1229.apicache.data.local.realm.QiitaUserItemsRealmEntity
+import com.caad1229.apicache.data.local.realm.QiitaItemsRealmEntity
 import com.caad1229.apicache.presentation.entity.QiitaItem
 import com.caad1229.apicache.util.realm.RealmFactory
 import io.reactivex.Single
@@ -41,7 +41,7 @@ class QiitaLocalDataSource @Inject constructor(
         }
         realm().use { realm ->
             realm.executeTransaction {
-                realm.insertOrUpdate(QiitaUserItemsRealmEntity(key, realmList))
+                realm.insertOrUpdate(QiitaItemsRealmEntity(key, realmList))
             }
         }
     }
@@ -50,14 +50,14 @@ class QiitaLocalDataSource @Inject constructor(
         val realmList = RealmList<QiitaItemRealmEntity>()
         realm().use { realm ->
             realm.executeTransaction {
-                realm.insertOrUpdate(QiitaUserItemsRealmEntity(userId, realmList))
+                realm.insertOrUpdate(QiitaItemsRealmEntity(userId, realmList))
             }
         }
     }
 
     @VisibleForTesting
-    fun getQiitaItemsRealmList(realm: Realm, userId: String): QiitaUserItemsRealmEntity? =
-            realm.where(QiitaUserItemsRealmEntity::class.java)
+    fun getQiitaItemsRealmList(realm: Realm, userId: String): QiitaItemsRealmEntity? =
+            realm.where(QiitaItemsRealmEntity::class.java)
                     .equalTo("userId", userId)
                     .findFirst()
 }

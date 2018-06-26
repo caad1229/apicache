@@ -4,7 +4,7 @@ import com.caad1229.apicache.api.gson.CustomGson
 import com.caad1229.apicache.data.local.mapper.QiitaItemRealmEntityMapper
 import com.caad1229.apicache.data.local.mapper.QiitaUserRealmEntityMapper
 import com.caad1229.apicache.data.local.realm.QiitaItemRealmEntity
-import com.caad1229.apicache.data.local.realm.QiitaUserItemsRealmEntity
+import com.caad1229.apicache.data.local.realm.QiitaItemsRealmEntity
 import com.caad1229.apicache.data.remote.qiita.mapper.QiitaItemResponseMapper
 import com.caad1229.apicache.data.remote.qiita.response.ItemResponse
 import com.caad1229.apicache.util.realm.RealmFactory
@@ -47,7 +47,7 @@ class QiitaLocalDataSourceTest {
         val realmList = RealmList<QiitaItemRealmEntity>()
         qiitaItemRealmEntityList().map { realmList.add(it) }
 
-        val cacheData = QiitaUserItemsRealmEntity(userId, realmList)
+        val cacheData = QiitaItemsRealmEntity(userId, realmList)
         doReturn(cacheData).`when`(dataSource).getQiitaItemsRealmList(mockedRealm, userId)
 
         val result = dataSource.getUserItems(userId).blockingGet()

@@ -5,7 +5,7 @@ import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import java.util.*
 
-open class QiitaUserItemsRealmEntity(
+open class QiitaItemsRealmEntity(
         @PrimaryKey
         open var userId: String = "",
         open var items: RealmList<QiitaItemRealmEntity> = RealmList(),

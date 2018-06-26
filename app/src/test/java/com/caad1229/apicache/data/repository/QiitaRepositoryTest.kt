@@ -4,7 +4,7 @@ import com.caad1229.apicache.data.datasource.QiitaLocalDataSource
 import com.caad1229.apicache.data.datasource.QiitaRemoteDataSource
 import com.caad1229.apicache.presentation.entity.QiitaItem
 import io.reactivex.Single
-import junit.framework.Assert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

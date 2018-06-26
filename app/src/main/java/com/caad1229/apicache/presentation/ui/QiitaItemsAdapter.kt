@@ -5,10 +5,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.caad1229.apicache.databinding.ListItemQiitaItemBinding
 import com.caad1229.apicache.presentation.entity.QiitaItem
-import com.caad1229.apicache.presentation.navigator.QiitaNavigator
+import com.caad1229.apicache.presentation.navigator.QiitaItemNavigator
 import com.caad1229.apicache.presentation.viewmodel.QiitaItemViewModel
 
-class QiitaUserItemsAdapter(val navigator: QiitaNavigator) : RecyclerView.Adapter<QiitaUserItemsAdapter.ViewHolder>() {
+class QiitaItemsAdapter(private val navigator: QiitaItemNavigator) : RecyclerView.Adapter<QiitaItemsAdapter.ViewHolder>() {
 
     var data: List<QiitaItem> = listOf()
 

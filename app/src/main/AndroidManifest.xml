@@ -21,7 +21,7 @@
         </activity>
 
         <activity
-            android:name=".presentation.ui.QiitaUserItemsActivity"
+            android:name=".presentation.ui.QiitaItemsActivity"
             android:label="realm cache" />
 
     </application>

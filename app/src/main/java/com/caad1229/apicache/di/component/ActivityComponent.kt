@@ -3,7 +3,7 @@ package com.caad1229.apicache.di.component
 import com.caad1229.apicache.MainActivity
 import com.caad1229.apicache.di.module.ActivityModule
 import com.caad1229.apicache.di.scope.ActivityScope
-import com.caad1229.apicache.presentation.ui.QiitaUserItemsActivity
+import com.caad1229.apicache.presentation.ui.QiitaItemsActivity
 import dagger.Subcomponent
 
 
@@ -12,5 +12,5 @@ import dagger.Subcomponent
 interface ActivityComponent {
 
     fun inject(target: MainActivity)
-    fun inject(target: QiitaUserItemsActivity)
+    fun inject(target: QiitaItemsActivity)
 }

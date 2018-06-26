@@ -10,10 +10,18 @@
         tools:ignore="HardcodedText">
 
         <Button
-            android:id="@+id/realm_cache"
+            android:id="@+id/my_items"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="realm cache"
+            android:text="自分の記事一覧"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <Button
+            android:id="@+id/recently_items"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="最新記事一覧"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
 
