@@ -11,6 +11,17 @@ class QiitaRemoteDataSource @Inject constructor(
         private val restService: QiitaRestService
 ) : QiitaDataSource {
 
+    override fun getItems(): Single<List<QiitaItem>> =
+            restService.getItems().map { it.map { mapper.mapToEntity(it) } }
+
+    override fun saveItems(items: List<QiitaItem>) {
+        throw UnsupportedOperationException("unsupported in remote")
+    }
+
+    override fun clearItems() {
+        throw UnsupportedOperationException("unsupported in remote")
+    }
+
     override fun getUserItems(userId: String): Single<List<QiitaItem>> =
             restService.getUserItems(userId).map { it.map { mapper.mapToEntity(it) } }
 

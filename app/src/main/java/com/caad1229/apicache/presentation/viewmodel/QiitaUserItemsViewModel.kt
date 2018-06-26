@@ -2,7 +2,7 @@ package com.caad1229.apicache.presentation.viewmodel
 
 import android.util.Log
 import com.caad1229.apicache.data.repository.QiitaRepository
-import com.caad1229.apicache.presentation.ui.QiitaUserItemsAdapter
+import com.caad1229.apicache.presentation.ui.QiitaItemsAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -13,7 +13,7 @@ class QiitaUserItemsViewModel @Inject constructor(
         private val repository: QiitaRepository
 ) {
     var userName = "caad1229"
-    var adapter: QiitaUserItemsAdapter? = null
+    var adapter: QiitaItemsAdapter? = null
 
     private val disposeBag: CompositeDisposable by lazy {
         CompositeDisposable()

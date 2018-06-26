@@ -10,14 +10,14 @@ import com.caad1229.apicache.di.component.ActivityComponent
 import com.caad1229.apicache.presentation.BaseActivity
 import com.caad1229.apicache.presentation.entity.QiitaItem
 import com.caad1229.apicache.presentation.entity.QiitaUser
-import com.caad1229.apicache.presentation.navigator.QiitaNavigator
+import com.caad1229.apicache.presentation.navigator.QiitaItemNavigator
 import com.caad1229.apicache.presentation.viewmodel.QiitaUserItemsViewModel
 import javax.inject.Inject
 
-class QiitaUserItemsActivity : BaseActivity(), QiitaNavigator {
+class QiitaItemsActivity : BaseActivity(), QiitaItemNavigator {
 
     private lateinit var binding: ActivityQiitaUserItemBinding
-    private val adapter: QiitaUserItemsAdapter = QiitaUserItemsAdapter(this)
+    private val adapter: QiitaItemsAdapter = QiitaItemsAdapter(this)
 
     @Inject
     lateinit var viewModel: QiitaUserItemsViewModel
@@ -54,6 +54,6 @@ class QiitaUserItemsActivity : BaseActivity(), QiitaNavigator {
     }
 
     companion object {
-        fun createIntent(context: Context) = Intent(context, QiitaUserItemsActivity::class.java)
+        fun createIntent(context: Context) = Intent(context, QiitaItemsActivity::class.java)
     }
 }

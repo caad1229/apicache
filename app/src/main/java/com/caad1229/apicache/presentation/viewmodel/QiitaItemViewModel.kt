@@ -7,14 +7,14 @@ import android.databinding.ObservableField
 import com.caad1229.apicache.BR
 import com.caad1229.apicache.R
 import com.caad1229.apicache.presentation.entity.QiitaItem
-import com.caad1229.apicache.presentation.navigator.QiitaNavigator
+import com.caad1229.apicache.presentation.navigator.QiitaItemNavigator
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 
 class QiitaItemViewModel(
         private val context: Context,
         private val item: QiitaItem,
-        private val navigator: QiitaNavigator
+        private val navigator: QiitaItemNavigator
 ) : BaseObservable() {
 
     val id: ObservableField<String> = ObservableField(item.user.id)

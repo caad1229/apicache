@@ -12,4 +12,7 @@ interface QiitaRestService {
     fun getUserItems(
             @Path("user_id") userId: String
     ): Single<List<ItemResponse>>
+
+    @GET("items")
+    fun getItems(): Single<List<ItemResponse>>
 }

@@ -3,7 +3,7 @@ package com.caad1229.apicache.presentation.viewmodel
 import android.content.Context
 import com.caad1229.apicache.presentation.entity.QiitaItem
 import com.caad1229.apicache.presentation.entity.QiitaUser
-import com.caad1229.apicache.presentation.navigator.QiitaNavigator
+import com.caad1229.apicache.presentation.navigator.QiitaItemNavigator
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import org.junit.Assert.assertEquals
@@ -22,7 +22,7 @@ class QiitaItemViewModelTest {
     private val createdAt = DateTime(2018, 1, 2, 15, 4)
     private val updatedAt = DateTime(2018, 1, 3, 15, 4)
 
-    private lateinit var mockedNavigator: QiitaNavigator
+    private lateinit var mockedNavigator: QiitaItemNavigator
 
     @Before
     fun setUp() {
@@ -35,7 +35,7 @@ class QiitaItemViewModelTest {
                 updatedAt = updatedAt,
                 user = QiitaUser("name", "user-id", "url")
         )
-        mockedNavigator = mock(QiitaNavigator::class.java)
+        mockedNavigator = mock(QiitaItemNavigator::class.java)
         viewModel = QiitaItemViewModel(context, item, mockedNavigator)
     }
 

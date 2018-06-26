@@ -10,6 +10,20 @@ class QiitaRepository @Inject constructor(
         private val localDataSource: QiitaLocalDataSource,
         private val remoteDataSource: QiitaRemoteDataSource
 ) {
+
+    fun getItems(forceRemote: Boolean = false): Single<List<QiitaItem>> {
+        val remote: Single<List<QiitaItem>> =
+                remoteDataSource.getItems().doOnSuccess { localDataSource.saveItems(it) }
+        val local: Single<List<QiitaItem>> =
+                localDataSource.getItems().onErrorResumeNext { remote }
+
+        return if (forceRemote) {
+            remote
+        } else {
+            local
+        }
+    }
+
     fun getUserItems(userId: String, forceRemote: Boolean = false): Single<List<QiitaItem>> {
         val remote: Single<List<QiitaItem>> =
                 remoteDataSource.getUserItems(userId).doOnSuccess { localDataSource.saveUserItems(userId, it) }
