@@ -20,28 +20,33 @@ class QiitaRepositoryTest {
 
     private lateinit var mockedRemoteDataSource: QiitaRemoteDataSource
     private lateinit var mockedRemoteData: QiitaItem
+    private lateinit var mockedRemoteUserData: QiitaItem
 
     private lateinit var mockedLocalDataSource: QiitaLocalDataSource
+    private lateinit var mockedLocalUserData: QiitaItem
     private lateinit var mockedLocalData: QiitaItem
 
     @Before
     fun setUp() {
         mockedRemoteData = mock(QiitaItem::class.java)
+        mockedRemoteUserData = mock(QiitaItem::class.java)
         mockedRemoteDataSource = mock(QiitaRemoteDataSource::class.java)
-        `when`(mockedRemoteDataSource.getUserItems(userId)).thenReturn(Single.just(listOf(mockedRemoteData)))
+        `when`(mockedRemoteDataSource.getUserItems(userId)).thenReturn(Single.just(listOf(mockedRemoteUserData)))
+        `when`(mockedRemoteDataSource.getItems()).thenReturn(Single.just(listOf(mockedRemoteData)))
 
+        mockedLocalUserData = mock(QiitaItem::class.java)
         mockedLocalData = mock(QiitaItem::class.java)
         mockedLocalDataSource = mock(QiitaLocalDataSource::class.java)
+        `when`(mockedLocalDataSource.getUserItems(userId)).thenReturn(Single.just(listOf(mockedLocalUserData)))
+        `when`(mockedLocalDataSource.getItems()).thenReturn(Single.just(listOf(mockedLocalData)))
 
         repository = QiitaRepository(mockedLocalDataSource, mockedRemoteDataSource)
     }
 
     @Test
     fun getUserItem_キャッシュあり() {
-        `when`(mockedLocalDataSource.getUserItems(userId)).thenReturn(Single.just(listOf(mockedLocalData)))
-
         val result = repository.getUserItems(userId).blockingGet()
-        assertEquals(mockedLocalData, result.first())
+        assertEquals(mockedLocalUserData, result.first())
     }
 
     @Test
@@ -50,14 +55,33 @@ class QiitaRepositoryTest {
                 .thenReturn(Single.error(QiitaLocalDataSource.NoCacheException()))
 
         val result = repository.getUserItems(userId).blockingGet()
-        assertEquals(mockedRemoteData, result.first())
+        assertEquals(mockedRemoteUserData, result.first())
     }
 
     @Test
     fun getUserItem_リモートから強制取得() {
-        `when`(mockedLocalDataSource.getUserItems(userId)).thenReturn(Single.just(listOf(mockedLocalData)))
-
         val result = repository.getUserItems(userId, true).blockingGet()
+        assertEquals(mockedRemoteUserData, result.first())
+    }
+
+    @Test
+    fun getItem_キャッシュあり() {
+        val result = repository.getItems().blockingGet()
+        assertEquals(mockedLocalData, result.first())
+    }
+
+    @Test
+    fun getItem_キャッシュなし() {
+        `when`(mockedLocalDataSource.getItems())
+                .thenReturn(Single.error(QiitaLocalDataSource.NoCacheException()))
+
+        val result = repository.getItems().blockingGet()
+        assertEquals(mockedRemoteData, result.first())
+    }
+
+    @Test
+    fun getItem_リモートから強制取得() {
+        val result = repository.getItems(true).blockingGet()
         assertEquals(mockedRemoteData, result.first())
     }
 }
