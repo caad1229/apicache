@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import com.caad1229.apicache.BuildConfig
 import com.caad1229.apicache.R
 import com.caad1229.apicache.databinding.ActivityQiitaUserItemBinding
@@ -21,32 +23,45 @@ class QiitaItemsActivity : BaseActivity(), QiitaItemNavigator, AbsQiitaItemViewM
 
     private lateinit var binding: ActivityQiitaUserItemBinding
     private val adapter: QiitaItemsAdapter = QiitaItemsAdapter(this)
+    private var forceRemote: Boolean = false
 
     @Inject
     lateinit var userItemsViewModel: QiitaUserItemsViewModel
     @Inject
     lateinit var recentlyItemsViewModel: QiitaRecentlyItemsViewModel
 
-    lateinit var viewModel: AbsQiitaItemViewModel
+    private lateinit var viewModel: AbsQiitaItemViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        if (savedInstanceState != null) {
+            forceRemote = savedInstanceState.getBoolean(SAVE_INSTANCE_STATE_FORCE_REMOTE)
+        }
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_qiita_user_item)
         binding.recyclerView.adapter = adapter
         binding.swipe.setOnRefreshListener {
-            viewModel.fetchData()
+            viewModel.fetchData(forceRemote)
         }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         // userId がある場合はユーザの一覧を表示する
         viewModel = if (intent.getStringExtra(EXTRA_USER_ID) == null) {
+            supportActionBar?.title = resources.getString(R.string.qiita_recently_items_title)
             recentlyItemsViewModel
         } else {
-            userItemsViewModel.userName = intent.getStringExtra(EXTRA_USER_ID)
+            val userId = intent.getStringExtra(EXTRA_USER_ID)
+            supportActionBar?.title = resources.getString(R.string.qiita_user_items_title, userId)
+            userItemsViewModel.userName = userId
             userItemsViewModel
         }
         viewModel.handler = this
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(SAVE_INSTANCE_STATE_FORCE_REMOTE, forceRemote)
     }
 
     override fun onStart() {
@@ -57,6 +72,22 @@ class QiitaItemsActivity : BaseActivity(), QiitaItemNavigator, AbsQiitaItemViewM
     override fun onStop() {
         viewModel.onStop()
         super.onStop()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.cache, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.item_force_remote -> {
+                item.isChecked = !item.isChecked
+                forceRemote = item.isChecked
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -88,6 +119,7 @@ class QiitaItemsActivity : BaseActivity(), QiitaItemNavigator, AbsQiitaItemViewM
 
     companion object {
         private const val EXTRA_USER_ID = BuildConfig.APPLICATION_ID + ".user_id"
+        private const val SAVE_INSTANCE_STATE_FORCE_REMOTE = BuildConfig.APPLICATION_ID + ".use_cache"
 
         fun createIntent(context: Context, userId: String? = null): Intent {
             val intent = Intent(context, QiitaItemsActivity::class.java)
