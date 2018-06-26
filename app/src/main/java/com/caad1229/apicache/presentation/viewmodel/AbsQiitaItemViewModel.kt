@@ -1,8 +1,6 @@
 package com.caad1229.apicache.presentation.viewmodel
 
-import android.util.Log
 import com.caad1229.apicache.presentation.entity.QiitaItem
-import com.caad1229.apicache.presentation.ui.QiitaItemsAdapter
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -10,7 +8,7 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 
 abstract class AbsQiitaItemViewModel {
-    var adapter: QiitaItemsAdapter? = null
+    var handler: Handler? = null
 
     private val disposeBag: CompositeDisposable by lazy {
         CompositeDisposable()
@@ -25,9 +23,9 @@ abstract class AbsQiitaItemViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    adapter?.updateData(it)
+                    handler?.onFetchSuccess(it)
                 }, {
-                    Log.d("TESTTEST", "errorrrr")
+                    handler?.onFetchError(it)
                 })
                 .addTo(disposeBag)
     }
@@ -37,4 +35,9 @@ abstract class AbsQiitaItemViewModel {
     }
 
     abstract fun useCaseRepository(forceRemote: Boolean): Single<List<QiitaItem>>
+
+    interface Handler {
+        fun onFetchSuccess(data: List<QiitaItem>)
+        fun onFetchError(error: Throwable)
+    }
 }

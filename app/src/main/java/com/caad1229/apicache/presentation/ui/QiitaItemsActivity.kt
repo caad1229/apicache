@@ -17,7 +17,7 @@ import com.caad1229.apicache.presentation.viewmodel.QiitaRecentlyItemsViewModel
 import com.caad1229.apicache.presentation.viewmodel.QiitaUserItemsViewModel
 import javax.inject.Inject
 
-class QiitaItemsActivity : BaseActivity(), QiitaItemNavigator {
+class QiitaItemsActivity : BaseActivity(), QiitaItemNavigator, AbsQiitaItemViewModel.Handler {
 
     private lateinit var binding: ActivityQiitaUserItemBinding
     private val adapter: QiitaItemsAdapter = QiitaItemsAdapter(this)
@@ -35,6 +35,9 @@ class QiitaItemsActivity : BaseActivity(), QiitaItemNavigator {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_qiita_user_item)
         binding.recyclerView.adapter = adapter
+        binding.swipe.setOnRefreshListener {
+            viewModel.fetchData()
+        }
 
         viewModel = if (intent.getStringExtra(EXTRA_USER_ID) == null) {
             recentlyItemsViewModel
@@ -42,7 +45,7 @@ class QiitaItemsActivity : BaseActivity(), QiitaItemNavigator {
             userItemsViewModel.userName = intent.getStringExtra(EXTRA_USER_ID)
             userItemsViewModel
         }
-        viewModel.adapter = adapter
+        viewModel.handler = this
     }
 
     override fun onStart() {
@@ -53,6 +56,16 @@ class QiitaItemsActivity : BaseActivity(), QiitaItemNavigator {
     override fun onStop() {
         viewModel.onStop()
         super.onStop()
+    }
+
+    override fun onFetchSuccess(data: List<QiitaItem>) {
+        binding.swipe.isRefreshing = false
+        adapter.updateData(data)
+    }
+
+    override fun onFetchError(error: Throwable) {
+        binding.swipe.isRefreshing = false
+        // TODO: handle error
     }
 
     override fun navigateToUserDetail(user: QiitaUser) {
