@@ -29,7 +29,6 @@ class QiitaItemsActivity : BaseActivity(), QiitaItemNavigator, AbsQiitaItemViewM
 
     lateinit var viewModel: AbsQiitaItemViewModel
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -38,7 +37,9 @@ class QiitaItemsActivity : BaseActivity(), QiitaItemNavigator, AbsQiitaItemViewM
         binding.swipe.setOnRefreshListener {
             viewModel.fetchData()
         }
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        // userId がある場合はユーザの一覧を表示する
         viewModel = if (intent.getStringExtra(EXTRA_USER_ID) == null) {
             recentlyItemsViewModel
         } else {
@@ -56,6 +57,11 @@ class QiitaItemsActivity : BaseActivity(), QiitaItemNavigator, AbsQiitaItemViewM
     override fun onStop() {
         viewModel.onStop()
         super.onStop()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return super.onSupportNavigateUp()
     }
 
     override fun onFetchSuccess(data: List<QiitaItem>) {
