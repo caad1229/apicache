@@ -1,6 +1,5 @@
 package com.caad1229.apicache.data.repository
 
-import com.caad1229.apicache.data.datasource.QiitaDataSource
 import com.caad1229.apicache.data.datasource.QiitaLocalDataSource
 import com.caad1229.apicache.data.datasource.QiitaRemoteDataSource
 import com.caad1229.apicache.presentation.entity.QiitaItem
@@ -14,7 +13,7 @@ class QiitaRepository @Inject constructor(
 
     fun getItems(forceRemote: Boolean = false): Single<List<QiitaItem>> {
         val remote: Single<List<QiitaItem>> =
-                remoteDataSource.getItems().doOnSuccess { localDataSource.saveItems(QiitaDataSource.ITEM_KEY, it) }
+                remoteDataSource.getItems().doOnSuccess { localDataSource.saveItems(it) }
         val local: Single<List<QiitaItem>> =
                 localDataSource.getItems().onErrorResumeNext { remote }
 
@@ -27,7 +26,7 @@ class QiitaRepository @Inject constructor(
 
     fun getUserItems(userId: String, forceRemote: Boolean = false): Single<List<QiitaItem>> {
         val remote: Single<List<QiitaItem>> =
-                remoteDataSource.getUserItems(userId).doOnSuccess { localDataSource.saveItems(userId, it) }
+                remoteDataSource.getUserItems(userId).doOnSuccess { localDataSource.saveUserItems(userId, it) }
         val local: Single<List<QiitaItem>> =
                 localDataSource.getUserItems(userId).onErrorResumeNext { remote }
 
