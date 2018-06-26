@@ -14,7 +14,8 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
 
-        my_items.setOnClickListener { startActivity(QiitaItemsActivity.createIntent(this)) }
+        my_items.setOnClickListener { startActivity(QiitaItemsActivity.createIntent(this, "caad1229")) }
+        recently_items.setOnClickListener { startActivity(QiitaItemsActivity.createIntent(this)) }
     }
 
     override fun inject(component: ActivityComponent) {

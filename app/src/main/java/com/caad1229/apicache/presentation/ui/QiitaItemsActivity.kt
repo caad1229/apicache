@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import com.caad1229.apicache.BuildConfig
 import com.caad1229.apicache.R
 import com.caad1229.apicache.databinding.ActivityQiitaUserItemBinding
 import com.caad1229.apicache.di.component.ActivityComponent
@@ -11,6 +12,8 @@ import com.caad1229.apicache.presentation.BaseActivity
 import com.caad1229.apicache.presentation.entity.QiitaItem
 import com.caad1229.apicache.presentation.entity.QiitaUser
 import com.caad1229.apicache.presentation.navigator.QiitaItemNavigator
+import com.caad1229.apicache.presentation.viewmodel.AbsQiitaItemViewModel
+import com.caad1229.apicache.presentation.viewmodel.QiitaRecentlyItemsViewModel
 import com.caad1229.apicache.presentation.viewmodel.QiitaUserItemsViewModel
 import javax.inject.Inject
 
@@ -20,7 +23,11 @@ class QiitaItemsActivity : BaseActivity(), QiitaItemNavigator {
     private val adapter: QiitaItemsAdapter = QiitaItemsAdapter(this)
 
     @Inject
-    lateinit var viewModel: QiitaUserItemsViewModel
+    lateinit var userItemsViewModel: QiitaUserItemsViewModel
+    @Inject
+    lateinit var recentlyItemsViewModel: QiitaRecentlyItemsViewModel
+
+    lateinit var viewModel: AbsQiitaItemViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +35,13 @@ class QiitaItemsActivity : BaseActivity(), QiitaItemNavigator {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_qiita_user_item)
         binding.recyclerView.adapter = adapter
+
+        viewModel = if (intent.getStringExtra(EXTRA_USER_ID) == null) {
+            recentlyItemsViewModel
+        } else {
+            userItemsViewModel.userName = intent.getStringExtra(EXTRA_USER_ID)
+            userItemsViewModel
+        }
         viewModel.adapter = adapter
     }
 
@@ -54,6 +68,12 @@ class QiitaItemsActivity : BaseActivity(), QiitaItemNavigator {
     }
 
     companion object {
-        fun createIntent(context: Context) = Intent(context, QiitaItemsActivity::class.java)
+        private const val EXTRA_USER_ID = BuildConfig.APPLICATION_ID + ".user_id"
+
+        fun createIntent(context: Context, userId: String? = null): Intent {
+            val intent = Intent(context, QiitaItemsActivity::class.java)
+            intent.putExtra(EXTRA_USER_ID, userId)
+            return intent
+        }
     }
 }
