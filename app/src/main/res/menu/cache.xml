@@ -6,7 +6,7 @@
         android:id="@+id/item_force_remote"
         android:checkable="true"
         android:checked="false"
-        android:title="fetch remote"
+        android:title="force remote"
         app:showAsAction="never"
         tools:ignore="HardcodedText" />
 </menu>
